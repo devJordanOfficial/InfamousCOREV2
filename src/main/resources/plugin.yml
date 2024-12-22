@@ -1,0 +1,4 @@
+name: InfamousCORE
+version: '0.0.1'
+main: com.infamousgc.infamousCORE.Main
+api-version: '1.21'
