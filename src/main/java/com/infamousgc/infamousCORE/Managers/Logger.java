@@ -4,47 +4,38 @@ import com.infamousgc.infamousCORE.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Logger {
-    private static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("\\{(\\d+)}");
+    private static final java.util.logging.Logger BUKKIT_LOGGER = Main.getPlugin(Main.class).getLogger();
+    private static final String SEVERE_HEADER = format("&c------------------------ &4SEVERE &c------------------------");
 
-    public static void log(String msg, Object... args) {
-        String formatted = formatMessage(msg, args);
-        formatted = ChatColor.translateAlternateColorCodes('&', "[" +
-                Main.getPlugin(Main.class).getName() + "] " + formatted);
-
-        Bukkit.getConsoleSender().sendMessage(formatted);
-    }
-
-    public static void severe(String msg, Object... args) {
-        log("&c------------------------ &4SEVERE &c------------------------");
-        log(msg, args);
-        log("&c------------------------ &4SEVERE &c------------------------");
+    public static void info(String msg, Object... args) {
+        BUKKIT_LOGGER.info(format(msg, args));
     }
 
     public static void warning(String msg, Object... args) {
-        log("&e------------------------ &6WARNING &e------------------------");
-        log(msg, args);
-        log("&e------------------------ &6WARNING &e------------------------");
+        BUKKIT_LOGGER.warning(format(msg, args));
     }
 
-    private static String formatMessage(String msg, Object... args) {
-        if (args == null || args.length == 0) return msg;
+    public static void severe(String msg, Object... args) {
+        BUKKIT_LOGGER.severe(SEVERE_HEADER);
+        BUKKIT_LOGGER.severe(format(msg, args));
+        BUKKIT_LOGGER.severe(SEVERE_HEADER);
+    }
 
-        StringBuilder result = new StringBuilder();
-        Matcher matcher = PLACEHOLDER_PATTERN.matcher(msg);
+    public static void log(Level level, String msg, Object... args) {
+        BUKKIT_LOGGER.log(level, format(msg, args));
+    }
 
-        while (matcher.find()) {
-            int index = Integer.parseInt(matcher.group(1)) -1;
-            if (index >= 0 && index < args.length)
-                matcher.appendReplacement(result, Matcher.quoteReplacement(args[index].toString()));
-            else
-                matcher.appendReplacement(result, matcher.group(0));
+    private static String format(String msg, Object... args) {
+        if (args.length > 0) {
+            for (int i = 0; i < args.length; i++) {
+                msg = msg.replace("{" + i + "}", String.valueOf(args[i]));
+            }
         }
-        matcher.appendTail(result);
-
-        return result.toString();
+        return ChatColor.translateAlternateColorCodes('&', msg);
     }
 }

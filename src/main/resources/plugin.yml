@@ -1,4 +1,72 @@
 name: InfamousCORE
-version: '0.0.1'
+version: ${project.version}
 main: com.infamousgc.infamousCORE.Main
-api-version: '1.21'
+api-version: '1.20'
+description: A core plugin for Infamous Minecraft Servers with essential commands and utilities.
+author: devJordan
+website: TBD
+
+commands:
+  # GAMEMODE
+  gamemode:
+    description: Change your or another player's game mode
+    usage: /gamemode <Gamemode> [Player]
+    aliases: [ gm ]
+    permission: core.gamemode
+  gms:
+    description: Change to survival mode
+    usage: /gms [Player]
+    permission: core.gamemode
+  gmc:
+    description: Change to creative mode
+    usage: /gmc [Player]
+    permission: core.gamemode
+  gma:
+    description: Change to adventure mode
+    usage: /gma [Player]
+    permission: core.gamemode
+  gmsp:
+    description: Change to spectator mode
+    usage: /gmsp [Player]
+    permission: core.gamemode
+  # NICKNAME
+  nickname:
+    description: Set or reset a player's nickname
+    usage: /nickname <Nickname/"reset"> [Player]
+    aliases: [ nick ]
+    permission: core.nickname
+
+permissions:
+  # GAMEMODE
+  core.gamemode:
+    description: Allows changing own game mode
+    default: op
+  core.gamemode.others:
+    description: Allows changing other players' game modes
+    default: op
+  core.gamemode.*:
+    description: Gives access to all gamemode commands
+    default: op
+    children:
+      core.gamemode: true
+      core.gamemode.others: true
+  # NICKNAME
+  core.nickname:
+    description: Allows changing own nickname
+    default: op
+  core.nickname.others:
+    description: Allows changing other players' nicknames
+    default: op
+  core.nickname.*:
+    description: Gives access to all nickname commands
+    default: op
+    children:
+      core.nickname: true
+      core.nickname.others: true
+  # WILDCARD
+  core.*:
+    description: Gives access to all InfamousCORE commands
+    default: op
+    children:
+      core.gamemode: true
+      core.gamemode.others: true

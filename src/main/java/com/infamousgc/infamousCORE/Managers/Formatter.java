@@ -54,19 +54,12 @@ public class Formatter {
     }
 
     private static String parseVariables(String msg, Object... args) {
-        if (args == null || args.length == 0) return msg;
-
-        StringBuilder result = new StringBuilder();
-        Matcher matcher = PLACEHOLDER_PATTERN.matcher(msg);
-
-        while (matcher.find()) {
-            int index = Integer.parseInt(matcher.group(1)) -1;
-            String replacement = (index >= 0 && index < args.length) ? args[index].toString() : matcher.group(0);
-            matcher.appendReplacement(result, Matcher.quoteReplacement(replacement));
+        if (args.length > 0) {
+            for (int i = 0; i < args.length; i++) {
+                msg = msg.replace("{" + i + "}", String.valueOf(args[i]));
+            }
         }
-        matcher.appendTail(result);
-
-        return result.toString();
+        return msg;
     }
 
     private static String replaceHexColors(String input) {

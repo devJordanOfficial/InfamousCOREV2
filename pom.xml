@@ -38,6 +38,9 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <outputDirectory>C:\Users\jorda\Documents\mcss_win-x86-64_v13.5.0\servers\Infamous Canary\plugins\update</outputDirectory>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
