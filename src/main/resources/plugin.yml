@@ -29,12 +29,36 @@ commands:
     description: Change to spectator mode
     usage: /gmsp [Player]
     permission: core.gamemode
+  # HOME
+  home:
+    description: Teleport to your or another player's home, if no name is provided defaults to "home"
+    usage: /home [Player]:[Home]
+    permission: core.home
+  sethome:
+    description: Set your home, if no name is provided defaults to "home"
+    usage: /sethome [Home]
+    permission: core.home
+  delhome:
+    description: Delete a home
+    usage: /delhome <Home>
+    permission: core.home
+  homes:
+    description: List your or another player's homes
+    usage: /homes [Player]
+    permission: core.home
   # NICKNAME
   nickname:
     description: Set or reset a player's nickname
     usage: /nickname <Nickname/"reset"> [Player]
     aliases: [ nick ]
     permission: core.nickname
+  # OTHER
+  confirm:
+    description: Confirm an action - does nothing on its own
+    usage: /confirm
+  cancel:
+    description: Cancel an action - does nothing on its own
+    usage: /cancel
 
 permissions:
   # GAMEMODE
@@ -50,6 +74,23 @@ permissions:
     children:
       core.gamemode: true
       core.gamemode.others: true
+  # HOME
+  core.home:
+    description: Allows setting and deleting own homes
+    default: op
+  core.home.others:
+    description: Allow listing and teleporting to other player' homes
+    default: op
+  core.home.max.unlimited:
+    description: Allows setting unlimited homes
+    default: op
+  core.home.*:
+    description: Gives access to all home commands, and unlimited homes
+    default: op
+    children:
+      core.home: true
+      core.home.others: true
+      core.home.max.unlimited: true
   # NICKNAME
   core.nickname:
     description: Allows changing own nickname
@@ -63,6 +104,13 @@ permissions:
     children:
       core.nickname: true
       core.nickname.others: true
+  # OTHER
+  core.cooldown.bypass:
+    description: Bypass teleportation cooldowns
+    default: op
+  core.warmup.bypass:
+    description: Bypass teleportation warmup
+    default: op
   # WILDCARD
   core.*:
     description: Gives access to all InfamousCORE commands
@@ -70,3 +118,10 @@ permissions:
     children:
       core.gamemode: true
       core.gamemode.others: true
+      core.home: true
+      core.home.others: true
+      core.home.max.unlimited: true
+      core.nickname: true
+      core.nickname.others: true
+      core.cooldown.bypass: true
+      core.warmup.bypass: true

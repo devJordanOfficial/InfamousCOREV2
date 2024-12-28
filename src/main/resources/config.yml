@@ -1,0 +1,29 @@
+#################################################################
+###                                                           ###
+###                    InfamousCORE Config                    ###
+###                           v2.0.0                          ###
+###                                                           ###
+#################################################################
+
+# MySQL Login
+# MySQL is required for the following modules:
+# - Homes
+# If a connection is not found, these modules will be disabled
+mysql:
+  host:
+  port:
+  database:
+  username:
+  password:
+
+###
+# HOME MODULE
+###
+home:
+  restricted-worlds:
+    - world_name_1
+    - world_name_2
+  max-permission-check: 50 # The max amount of homes a player can have via "core.sethome.max.<#>"
+
+teleport-cooldown: 5 # The amount of times (in seconds) a player must wait before teleporting again
+teleport-warmup: 3 # The amount of time (in seconds) it takes for a player to teleport

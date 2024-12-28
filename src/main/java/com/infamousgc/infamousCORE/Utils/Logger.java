@@ -1,16 +1,13 @@
-package com.infamousgc.infamousCORE.Managers;
+package com.infamousgc.infamousCORE.Utils;
 
 import com.infamousgc.infamousCORE.Main;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 import java.util.logging.Level;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Logger {
     private static final java.util.logging.Logger BUKKIT_LOGGER = Main.getPlugin(Main.class).getLogger();
-    private static final String SEVERE_HEADER = format("&c------------------------ &4SEVERE &c------------------------");
+    private static final String SEVERE_HEADER = format("------------------------ SEVERE ------------------------");
 
     public static void info(String msg, Object... args) {
         BUKKIT_LOGGER.info(format(msg, args));
@@ -36,6 +33,6 @@ public class Logger {
                 msg = msg.replace("{" + i + "}", String.valueOf(args[i]));
             }
         }
-        return ChatColor.translateAlternateColorCodes('&', msg);
+        return msg;
     }
 }

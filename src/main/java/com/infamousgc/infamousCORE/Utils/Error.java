@@ -1,9 +1,9 @@
-package com.infamousgc.infamousCORE.Managers;
+package com.infamousgc.infamousCORE.Utils;
 
 import org.bukkit.command.CommandSender;
 
-import static com.infamousgc.infamousCORE.Managers.Formatter.PREFIX_ERROR;
-import static com.infamousgc.infamousCORE.Managers.Formatter.format;
+import static com.infamousgc.infamousCORE.Utils.Formatter.PREFIX_ERROR;
+import static com.infamousgc.infamousCORE.Utils.Formatter.format;
 
 public class Error {
     public static void noPermission(CommandSender sender, String node) {

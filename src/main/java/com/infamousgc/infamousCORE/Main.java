@@ -1,63 +1,81 @@
 package com.infamousgc.infamousCORE;
 
-import com.infamousgc.infamousCORE.Managers.ConfigManager;
-import com.infamousgc.infamousCORE.Managers.Logger;
-import com.infamousgc.infamousCORE.Managers.Modules;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.command.TabCompleter;
+import com.infamousgc.infamousCORE.Data.PlayerData;
+import com.infamousgc.infamousCORE.Data.PlayerDataManager;
+import com.infamousgc.infamousCORE.Storage.Database;
+import com.infamousgc.infamousCORE.Storage.FileManager;
+import com.infamousgc.infamousCORE.Tasks.ConfirmationManager;
+import com.infamousgc.infamousCORE.Tasks.CooldownManager;
+import com.infamousgc.infamousCORE.Tasks.WarmupManager;
+import com.infamousgc.infamousCORE.Utils.Logger;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Arrays;
-import java.util.logging.Level;
+import java.util.Map;
+import java.util.UUID;
 
 public final class Main extends JavaPlugin {
 
-    private ConfigManager generalConfig;
+    private FileManager generalConfig;
+    private Database database;
+
+    private PlayerDataManager playerDataManager;
+    private ConfirmationManager confirmationManager;
+    private CooldownManager cooldownManager;
+    private WarmupManager warmupManager;
+
+    private boolean disabled;
 
     @Override
     public void onEnable() {
         loadConfig();
-        registerCommands();
+        loadManagers();
+        loadData();
+        registrar();
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        saveData();
     }
 
     private void loadConfig() {
-        generalConfig = new ConfigManager(this, "config.yml");
+        generalConfig = new FileManager(this, "config.yml");
     }
 
-    private void registerCommands() {
-        for (Modules module : Modules.values()) {
-            try {
-                CommandExecutor executor = module.getExecutor().getDeclaredConstructor().newInstance();
-                TabCompleter tabCompleter = module.getTabCompleter().getDeclaredConstructor().newInstance();
-                boolean moduleLoaded = true;
+    private void loadManagers() {
+        playerDataManager = new PlayerDataManager();
+        confirmationManager = new ConfirmationManager(this);
+        cooldownManager = new CooldownManager(this);
+        warmupManager = new WarmupManager(this);
+    }
 
-                for (String commandName : module.getCommands()) {
-                    PluginCommand command = getCommand(commandName);
-                    if (command != null) {
-                        command.setExecutor(executor);
-                        command.setTabCompleter(tabCompleter);
-                    } else {
-                        Logger.warning("Failed to register command '{0}' of module '{1}", commandName, module.name());
-                        moduleLoaded = false;
-                    }
-                }
+    private void registrar() {
+        Registrar registrar = new Registrar(this);
+        registrar.registerCommands();
+        registrar.registerListeners();
+    }
 
-                if (moduleLoaded)
-                    Logger.info("Successfully loaded module: {0}", module.name());
-                else
-                    Logger.warning("Module '{0}' may not work as expected. Loaded with some command registration failures", module.name());
-            } catch (Exception e) {
-                Logger.severe("Failed to initialize command executor for {0}: {1}", module.name(), e.getMessage());
-                Logger.log(Level.SEVERE, Arrays.toString(e.getStackTrace()));
-            }
+    private void loadData() {
+        this.database = new Database(this);
+        database.loadData();
+    }
+
+    private void saveData() {
+        if (database == null) this.database = new Database(this);
+
+        Map<UUID, PlayerData> allPlayerData = playerDataManager.getAllPlayerData();
+        for (Map.Entry<UUID, PlayerData> entry : allPlayerData.entrySet()) {
+            database.setData(entry.getKey());
         }
+
+        Logger.info("Saving data for {0} player" + (allPlayerData.size() > 1 ? "s" : ""), allPlayerData.size());
+        database.disconnect();
     }
 
-    public ConfigManager generalConfig() { return generalConfig; }
+    public PlayerDataManager getPlayerDataManager() { return playerDataManager; }
+    public ConfirmationManager getConfirmationManager() { return confirmationManager; }
+    public CooldownManager getCooldownManager() { return cooldownManager; }
+    public WarmupManager getWarmupManager() { return warmupManager; }
+
+    public FileManager generalConfig() { return generalConfig; }
 }

@@ -1,14 +1,14 @@
 package com.infamousgc.infamousCORE.Modules;
 
-import com.infamousgc.infamousCORE.Managers.Error;
+import com.infamousgc.infamousCORE.Utils.Error;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import static com.infamousgc.infamousCORE.Managers.Formatter.PREFIX_GENERAL;
-import static com.infamousgc.infamousCORE.Managers.Formatter.format;
+import static com.infamousgc.infamousCORE.Utils.Formatter.PREFIX_GENERAL;
+import static com.infamousgc.infamousCORE.Utils.Formatter.format;
 
 public class NicknameModule implements CommandExecutor {
     private static final String USAGE = "/nickname <Nickname/\"reset\"> [Player]";

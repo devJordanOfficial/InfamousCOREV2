@@ -1,4 +1,4 @@
-package com.infamousgc.infamousCORE.Managers;
+package com.infamousgc.infamousCORE.Utils;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -18,6 +18,10 @@ public class Formatter {
         String parsed = parseVariables(msg, args);
         parsed = replaceHexColors(parsed);
         return ChatColor.translateAlternateColorCodes('&', parsed);
+    }
+
+    public static String capitalize(String text) {
+        return Character.toUpperCase(text.charAt(0)) + text.substring(1);
     }
 
     public static String gradient(String startHex, String endHex, String msg) {

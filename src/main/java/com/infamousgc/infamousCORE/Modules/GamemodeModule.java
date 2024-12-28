@@ -1,6 +1,6 @@
 package com.infamousgc.infamousCORE.Modules;
 
-import com.infamousgc.infamousCORE.Managers.Error;
+import com.infamousgc.infamousCORE.Utils.Error;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.infamousgc.infamousCORE.Managers.Formatter.*;
+import static com.infamousgc.infamousCORE.Utils.Formatter.*;
 
 public class GamemodeModule implements CommandExecutor {
     private static final String USAGE = "/gamemode <Gamemode> [Player]";

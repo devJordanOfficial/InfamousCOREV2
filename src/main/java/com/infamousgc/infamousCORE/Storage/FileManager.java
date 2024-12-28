@@ -1,6 +1,7 @@
-package com.infamousgc.infamousCORE.Managers;
+package com.infamousgc.infamousCORE.Storage;
 
 import com.infamousgc.infamousCORE.Main;
+import com.infamousgc.infamousCORE.Utils.Logger;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -9,14 +10,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class ConfigManager {
+public class FileManager {
     private final Main plugin;
     private final String fileName;
 
     private FileConfiguration ranksConfig = null;
     private File configFile = null;
 
-    public ConfigManager(Main plugin, String fileName) {
+    public FileManager(Main plugin, String fileName) {
         this.plugin = plugin;
         this.fileName = fileName;
         saveDefaultConfig();
