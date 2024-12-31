@@ -1,6 +1,7 @@
 package com.infamousgc.infamousCORE.Storage;
 
 import com.infamousgc.infamousCORE.Main;
+import com.infamousgc.infamousCORE.ModuleManager;
 import com.infamousgc.infamousCORE.Utils.Logger;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -51,11 +52,11 @@ public class MySQL {
         if (!validLogin()) {
             Logger.severe("MySQL connection defined in config.yml is invalid. Some modules require a MySQL connection " +
                     "to function.");
+            ModuleManager.HOME.disable();
             return;
-            // Certain modules need to be disabled
         }
 
-        connect();
+        this.connection = getConnection();
         createHomeTable();
     }
 
@@ -64,18 +65,25 @@ public class MySQL {
     }
 
     /**
-     * Establishes a connection to the MySQL database
+     * Returns the current connection, opens a new one if none is found
+     *
+     * @return The Connection object
      */
-    private void connect() {
-        if (isConnected()) return;
+    protected Connection getConnection() {
+        if (isConnected()) return connection;
 
         try {
-            connection = DriverManager.getConnection(jdbcUrl, username, password);
-            Logger.info("Successfully connected to MySQL database");
+            if (connection == null || connection.isClosed()) {
+                connection = DriverManager.getConnection(jdbcUrl, username, password);
+                Logger.info("Connected to MySQL database");
+            }
         } catch (SQLException e) {
-            Logger.severe("Failed to connect to MySQL: {0}", e.getMessage());
-            Logger.log(Level.SEVERE, Arrays.toString(e.getStackTrace()));
+            Logger.severe("Failed to close MySQL connection: {0}", e.getMessage());
+            Arrays.stream(e.getStackTrace())
+                    .forEach(element -> Logger.log(Level.SEVERE, element.toString()));
         }
+
+        return connection;
     }
 
     /**
@@ -89,9 +97,8 @@ public class MySQL {
             Logger.info("MySQL connection closed successfully");
         } catch (SQLException e) {
             Logger.severe("Failed to close MySQL connection: {0}", e.getMessage());
-            Logger.log(Level.SEVERE, Arrays.toString(e.getStackTrace()));
-        } finally {
-            connection = null;
+            Arrays.stream(e.getStackTrace())
+                    .forEach(element -> Logger.log(Level.SEVERE, element.toString()));
         }
     }
 
@@ -106,15 +113,6 @@ public class MySQL {
         } catch (SQLException e) {
             return false;
         }
-    }
-
-    /**
-     * Gets the current MySQL connection
-     *
-     * @return The Connection object
-     */
-    protected Connection getConnection() {
-        return connection;
     }
 
     /**

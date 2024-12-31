@@ -10,12 +10,14 @@ import com.infamousgc.infamousCORE.Tasks.WarmupManager;
 import com.infamousgc.infamousCORE.Utils.Logger;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.UUID;
 
 public final class Main extends JavaPlugin {
 
     private FileManager generalConfig;
+    private FileManager conversions;
     private Database database;
 
     private PlayerDataManager playerDataManager;
@@ -40,6 +42,7 @@ public final class Main extends JavaPlugin {
 
     private void loadConfig() {
         generalConfig = new FileManager(this, "config.yml");
+        conversions = new FileManager(this, "conversions.yml");
     }
 
     private void loadManagers() {
@@ -61,11 +64,9 @@ public final class Main extends JavaPlugin {
     }
 
     private void saveData() {
-        if (database == null) this.database = new Database(this);
-
         Map<UUID, PlayerData> allPlayerData = playerDataManager.getAllPlayerData();
-        for (Map.Entry<UUID, PlayerData> entry : allPlayerData.entrySet()) {
-            database.setData(entry.getKey());
+        for (UUID uuid : allPlayerData.keySet()) {
+            database.setData(uuid);
         }
 
         Logger.info("Saving data for {0} player" + (allPlayerData.size() > 1 ? "s" : ""), allPlayerData.size());
@@ -78,4 +79,5 @@ public final class Main extends JavaPlugin {
     public WarmupManager getWarmupManager() { return warmupManager; }
 
     public FileManager generalConfig() { return generalConfig; }
+    public FileManager conversions() { return conversions; }
 }

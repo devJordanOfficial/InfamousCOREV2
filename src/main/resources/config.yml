@@ -27,3 +27,10 @@ home:
 
 teleport-cooldown: 5 # The amount of times (in seconds) a player must wait before teleporting again
 teleport-warmup: 3 # The amount of time (in seconds) it takes for a player to teleport
+cooldown: # The amount of time (in seconds) a player must wait before...
+  teleport: 5 # ...teleporting
+  heal: # ...using /heal
+  feed: # ...using /feed
+
+warmup:
+  teleport: 3

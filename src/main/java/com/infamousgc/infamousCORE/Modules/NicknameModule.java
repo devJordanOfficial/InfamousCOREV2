@@ -11,7 +11,7 @@ import static com.infamousgc.infamousCORE.Utils.Formatter.PREFIX_GENERAL;
 import static com.infamousgc.infamousCORE.Utils.Formatter.format;
 
 public class NicknameModule implements CommandExecutor {
-    private static final String USAGE = "/nickname <Nickname/\"reset\"> [Player]";
+    private static final String USAGE = "/nickname <reset|[Nick]> [Player]";
     private static final String PERMISSION_NICKNAME = "core.nickname";
     private static final String PERMISSION_NICKNAME_OTHERS = "core.nickname.others";
 

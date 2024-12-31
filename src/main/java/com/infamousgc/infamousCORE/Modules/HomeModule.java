@@ -2,6 +2,7 @@ package com.infamousgc.infamousCORE.Modules;
 
 import com.infamousgc.infamousCORE.Data.PlayerDataManager;
 import com.infamousgc.infamousCORE.Main;
+import com.infamousgc.infamousCORE.ModuleManager;
 import com.infamousgc.infamousCORE.Tasks.ConfirmationManager;
 import com.infamousgc.infamousCORE.Tasks.CooldownManager;
 import com.infamousgc.infamousCORE.Tasks.WarmupManager;
@@ -35,6 +36,7 @@ public class HomeModule implements CommandExecutor {
     private static final String PERMISSION_HOME = "core.home";
     private static final String PERMISSION_HOME_UNLIMITED = "core.home.max.unlimited";
     private static final String PERMISSION_HOME_OTHERS = "core.home.others";
+    private static final String PERMISSION_COOLDOWN_BYPASS_HOME = "core.cooldown.bypass.home";
 
     public HomeModule(Main plugin) {
         this.plugin = plugin;
@@ -46,6 +48,11 @@ public class HomeModule implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!ModuleManager.HOME.isEnabled()) {
+            Error.moduleDisabled(sender);
+            return true;
+        }
+
         if (!(sender instanceof Player player)) {
             Error.mustBePlayer(sender);
             return true;
@@ -163,11 +170,12 @@ public class HomeModule implements CommandExecutor {
             return;
         }
 
-        if (!cooldownManager.check(player)) return;
+        if (!cooldownManager.check(player, CooldownManager.CooldownType.TELEPORT) && !player.hasPermission(PERMISSION_COOLDOWN_BYPASS_HOME))
+            return;
 
         warmupManager.start(uuid, () -> {
             player.teleport(loc);
-            cooldownManager.setCooldown(player);
+            cooldownManager.setCooldown(player, CooldownManager.CooldownType.TELEPORT);
         });
     }
 

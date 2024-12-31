@@ -7,6 +7,17 @@ author: devJordan
 website: TBD
 
 commands:
+  # CONDENSE
+  condense:
+    description: Condense items into their compacted items/blocks
+    usage: /condense [all]
+    aliases: [ block, compress ]
+    permission: core.condense
+  # FEED
+  feed:
+    description: Feed yourself or another player
+    usage: /feed [Player]
+    permission: core.feed
   # GAMEMODE
   gamemode:
     description: Change your or another player's game mode
@@ -29,6 +40,11 @@ commands:
     description: Change to spectator mode
     usage: /gmsp [Player]
     permission: core.gamemode
+  # HEAL
+  heal:
+    description: Heal yourself or another player
+    usage: /heal [Player]
+    permission: core.heal
   # HOME
   home:
     description: Teleport to your or another player's home, if no name is provided defaults to "home"
@@ -61,6 +77,23 @@ commands:
     usage: /cancel
 
 permissions:
+  # CONDENSE
+  core.condense:
+    description: Allows condensing items
+    default: op
+  # FEED
+  core.feed:
+    description: Allows feeding yourself
+    default: op
+  core.feed.others:
+    description: Allows feeding other players
+    default: op
+  core.feed.*:
+    description: Gives access to all feed commands
+    default: op
+    children:
+      core.feed: true
+      core.feed.others: true
   # GAMEMODE
   core.gamemode:
     description: Allows changing own game mode
@@ -74,6 +107,19 @@ permissions:
     children:
       core.gamemode: true
       core.gamemode.others: true
+  # HEAL
+  core.heal:
+    description: Allows healing yourself
+    default: op
+  core.heal.others:
+    description: Allows healing other players
+    default: op
+  core.heal.*:
+    description: Gives access to all heal commands
+    default: op
+    children:
+      core.heal: true
+      core.heal.others: true
   # HOME
   core.home:
     description: Allows setting and deleting own homes
@@ -105,9 +151,22 @@ permissions:
       core.nickname: true
       core.nickname.others: true
   # OTHER
-  core.cooldown.bypass:
-    description: Bypass teleportation cooldowns
+  core.cooldown.bypass.home:
+    description: Bypass home teleportation cooldown
     default: op
+  core.cooldown.bypass.heal:
+    description: Bypass healing cooldown
+    default: op
+  core.cooldown.bypass.feed:
+    description: Bypass feeding cooldown
+    default: op
+  core.cooldown.bypass.*:
+    description: Bypass all cooldowns
+    default: op
+    children:
+      core.cooldown.bypass.home: true
+      core.cooldown.bypass.heal: true
+      core.cooldown.bypass.feed: true
   core.warmup.bypass:
     description: Bypass teleportation warmup
     default: op
@@ -116,6 +175,11 @@ permissions:
     description: Gives access to all InfamousCORE commands
     default: op
     children:
+      core.condense: true
+      core.feed: true
+      core.feed.others: true
+      core.heal: true
+      core.heal.others: true
       core.gamemode: true
       core.gamemode.others: true
       core.home: true
@@ -123,5 +187,7 @@ permissions:
       core.home.max.unlimited: true
       core.nickname: true
       core.nickname.others: true
-      core.cooldown.bypass: true
+      core.cooldown.bypass.home: true
+      core.cooldown.bypass.heal: true
+      core.cooldown.bypass.feed: true
       core.warmup.bypass: true

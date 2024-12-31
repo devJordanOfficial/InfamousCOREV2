@@ -3,6 +3,7 @@ package com.infamousgc.infamousCORE.Utils;
 import com.infamousgc.infamousCORE.Main;
 import org.bukkit.ChatColor;
 
+import java.util.Arrays;
 import java.util.logging.Level;
 
 public class Logger {
@@ -34,5 +35,10 @@ public class Logger {
             }
         }
         return msg;
+    }
+
+    public static void printStackTrace(StackTraceElement[] stackTrace) {
+        Arrays.stream(stackTrace)
+                .forEach(element -> log(Level.SEVERE, element.toString()));
     }
 }

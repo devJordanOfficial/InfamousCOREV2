@@ -34,4 +34,8 @@ public class Error {
         sender.sendMessage(format(PREFIX_ERROR + "&7Oops! There was an error in the plugin, please notify an admin."));
         Logger.severe(log);
     }
+
+    public static void moduleDisabled(CommandSender sender) {
+        sender.sendMessage(format(PREFIX_ERROR + "This command is disabled, please contact an admin if you believe this is a mistake."));
+    }
 }

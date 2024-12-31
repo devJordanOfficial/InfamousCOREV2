@@ -27,13 +27,13 @@ public class WarmupManager {
         Player player = Bukkit.getPlayer(uuid);
         if (player == null) return;
 
-        int warmupTime = plugin.generalConfig().getConfig().getInt("teleport-warmup");
+        int warmupTime = plugin.generalConfig().getConfig().getInt("warmup.teleport");
         if (warmupTime <= 0 || player.hasPermission(PERMISSION_WARMUP_BYPASS)) {
             onComplete.run();
             return;
         }
 
-        cancel(uuid);
+        cancel(uuid); // TODO: Don't send action bar if cancelled by another command (ie. during current warmup)
 
         BukkitRunnable runnable = new BukkitRunnable() {
             int remaining = warmupTime;

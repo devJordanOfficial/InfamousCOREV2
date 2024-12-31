@@ -1,7 +1,6 @@
 package com.infamousgc.infamousCORE.Storage;
 
 import com.infamousgc.infamousCORE.Data.PlayerData;
-import com.infamousgc.infamousCORE.Data.PlayerDataManager;
 import com.infamousgc.infamousCORE.Main;
 import com.infamousgc.infamousCORE.Utils.Logger;
 import org.bukkit.Bukkit;
@@ -11,7 +10,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
@@ -45,37 +43,33 @@ public class Database extends MySQL {
      */
     public void setData(UUID uuid) {
         PlayerData data = plugin.getPlayerDataManager().getPlayerData(uuid);
+        Connection connection = getConnection();
 
-        try (Connection connection = getConnection()) {
-            // First, delete all existing homes for the player
-            try (PreparedStatement statement = connection.prepareStatement(DELETE_PLAYER_HOMES_SQL)) {
-                statement.setString(1, uuid.toString());
-                statement.executeUpdate();
-            }
+        resetPlayer(uuid);
 
             // Then, insert all current homes
-            try (PreparedStatement statement = connection.prepareStatement(INSERT_HOME_SQL)) {
-                for (Map.Entry<String, Location> entry : data.getHomes().entrySet()) {
-                    String homeName = entry.getKey();
-                    Location loc = entry.getValue();
-                    String world = loc.getWorld() != null ? loc.getWorld().getName() : "null";
+        try (PreparedStatement statement = connection.prepareStatement(INSERT_HOME_SQL)) {
+            for (Map.Entry<String, Location> entry : data.getHomes().entrySet()) {
+                String homeName = entry.getKey();
+                Location loc = entry.getValue();
+                String world = loc.getWorld() != null ? loc.getWorld().getName() : "null";
 
-                    statement.setString(1, uuid.toString());
-                    statement.setString(2, homeName);
-                    statement.setString(3, world);
-                    statement.setDouble(4, loc.getX());
-                    statement.setDouble(5, loc.getY());
-                    statement.setDouble(6, loc.getZ());
-                    statement.setFloat(7, loc.getYaw());
-                    statement.setFloat(8, loc.getPitch());
+                statement.setString(1, uuid.toString());
+                statement.setString(2, homeName);
+                statement.setString(3, world);
+                statement.setDouble(4, loc.getX());
+                statement.setDouble(5, loc.getY());
+                statement.setDouble(6, loc.getZ());
+                statement.setFloat(7, loc.getYaw());
+                statement.setFloat(8, loc.getPitch());
 
-                    statement.addBatch();
-                }
-                statement.executeBatch();
+                statement.addBatch();
             }
+            statement.executeBatch();
         } catch (SQLException e) {
             Logger.severe("Failed to save data to MySQL: {0}", e.getMessage());
-            Logger.log(Level.SEVERE, Arrays.toString(e.getStackTrace()));
+            Arrays.stream(e.getStackTrace())
+                    .forEach(element -> Logger.log(Level.SEVERE, element.toString()));
         }
     }
 
@@ -83,9 +77,9 @@ public class Database extends MySQL {
      * Loads all player home data from the database
      */
     public void loadData() {
+        Connection connection = getConnection();
 
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(SELECT_ALL_HOMES_SQL);
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_HOMES_SQL);
              ResultSet result = statement.executeQuery()) {
 
             while(result.next()) {
@@ -105,7 +99,19 @@ public class Database extends MySQL {
             }
         } catch (SQLException e) {
             Logger.severe("Failed to load data from MySQL: {0}", e.getMessage());
-            Logger.log(Level.SEVERE, Arrays.toString(e.getStackTrace()));
+            Arrays.stream(e.getStackTrace())
+                    .forEach(element -> Logger.log(Level.SEVERE, element.toString()));
+        }
+    }
+
+    private void resetPlayer(UUID uuid) {
+        try (PreparedStatement statement = getConnection().prepareStatement(DELETE_PLAYER_HOMES_SQL)) {
+            statement.setString(1, uuid.toString());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            Logger.severe("Failed to reset data for UUID {0}: {1}", uuid.toString(), e.getMessage());
+            Arrays.stream(e.getStackTrace())
+                    .forEach(element -> Logger.log(Level.SEVERE, element.toString()));
         }
     }
 }

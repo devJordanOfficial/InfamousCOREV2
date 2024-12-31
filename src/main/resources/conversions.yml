@@ -1,0 +1,38 @@
+# All material names can be found here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
+conversions:
+  gold_nugget: # Identifier: Any name you want, no spaces
+    from: GOLD_NUGGET # Material name for the item you want to convert from
+    to: GOLD_INGOT # Material; name for the item you want to convert into
+    ratio: "9:1" # Ratio of <from_item>:<to_item>, must contain quotes. If only number is provided ratio is assumed to be <Provided>:1 and can be with or without quotes
+  gold_ingot:
+    from: GOLD_INGOT
+    to: GOLD_BLOCK
+    ratio: 9 # This is assumed to be a 9:1 ratio, doesn't require quotations
+  coal:
+    from: COAL
+    to: COAL_BLOCK
+    ratio: 9
+  iron_nugget:
+    from: IRON_NUGGET
+    to: IRON_INGOT
+    ratio: 9
+  iron_ingot:
+    from: IRON_INGOT
+    to: IRON_BLOCK
+    ratio: 9
+  lapis:
+    from: LAPIS_LAZULI
+    to: LAPIS_BLOCK
+    ratio: 9
+  redstone:
+    from: REDSTONE
+    to: REDSTONE_BLOCK
+    ratio: 9
+  diamond:
+    from: DIAMOND
+    to: DIAMOND_BLOCK
+    ratio: 9
+  emerald:
+    from: EMERALD
+    to: EMERALD_BLOCK
+    ratio: 9
