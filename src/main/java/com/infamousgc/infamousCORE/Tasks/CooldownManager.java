@@ -47,14 +47,16 @@ public class CooldownManager {
 
     private String getMessage(CooldownType type, long remainingTime) {
         return switch (type) {
-            case TELEPORT -> "&7You must wait &e" + remainingTime + " seconds&7 before teleporting again";
+            case HOME -> "&7You must wait &e" + remainingTime + " seconds&7 before teleporting to a home again";
+            case SPAWN -> "&7You must wait &e" + remainingTime + " seconds&7 teleporting to spawn again";
             case HEAL -> "&7You must wait &e" + remainingTime + " seconds&7 before healing again";
             case FEED -> "&7You must wait &e" + remainingTime + " seconds&7 before feeding yourself again";
         };
     }
 
     public enum CooldownType {
-        TELEPORT,
+        HOME,
+        SPAWN,
         HEAL,
         FEED,
     }

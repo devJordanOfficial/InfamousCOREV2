@@ -2,6 +2,7 @@ package com.infamousgc.infamousCORE;
 
 import com.infamousgc.infamousCORE.Events.EntityDamage;
 import com.infamousgc.infamousCORE.Events.PlayerMove;
+import com.infamousgc.infamousCORE.Modules.SpawnModule;
 import com.infamousgc.infamousCORE.Utils.Logger;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
@@ -82,6 +83,7 @@ public class Registrar {
         PluginManager manager = plugin.getServer().getPluginManager();
         manager.registerEvents(new EntityDamage(plugin), plugin);
         manager.registerEvents(new PlayerMove(plugin), plugin);
+        manager.registerEvents(new SpawnModule(plugin), plugin);
     }
 
     private CommandExecutor createExecutor(Class<? extends CommandExecutor> executorClass) throws Exception {

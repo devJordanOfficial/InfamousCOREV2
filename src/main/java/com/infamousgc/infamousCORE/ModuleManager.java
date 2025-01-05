@@ -14,7 +14,8 @@ public enum ModuleManager {
     GAMEMODE(GamemodeModule.class, GamemodeTab.class, "gamemode", "gms", "gmc", "gma", "gmsp"),
     HEAL(HealModule.class, FeedHealTab.class, "heal"),
     HOME(HomeModule.class, HomeTab.class, "sethome", "delhome", "home", "homes"),
-    NICKNAME(NicknameModule.class, NicknameTab.class, "nickname");
+    NICKNAME(NicknameModule.class, NicknameTab.class, "nickname"),
+    SPAWN(SpawnModule.class, SpawnTab.class, "spawn", "setspawn");
 
     private final Class<? extends CommandExecutor> executor;
     private final Class<? extends TabCompleter> tabCompleter;

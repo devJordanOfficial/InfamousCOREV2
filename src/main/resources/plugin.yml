@@ -68,6 +68,15 @@ commands:
     usage: /nickname <Nickname/"reset"> [Player]
     aliases: [ nick ]
     permission: core.nickname
+  # SPAWN
+  spawn:
+    description: Teleport to server spawn
+    usage: /spawn [Player]
+    permission: core.spawn
+  setspawn:
+    description: Set the server spawn to current location
+    usage: /setspawn
+    permission: core.setspawn
   # OTHER
   confirm:
     description: Confirm an action - does nothing on its own
@@ -150,9 +159,28 @@ permissions:
     children:
       core.nickname: true
       core.nickname.others: true
+  # SPAWN
+  core.spawn:
+    description: Allows teleporting to server spawn
+    default: true
+  core.spawn.others:
+    description: Allows teleporting other players to spawn
+    default: op
+  core.setspawn:
+    description: Allows setting the server spawn
+    default: op
+  core.spawn.*:
+    description: Gives access to all spawn commands (except /setspawn)
+    default: op
+    children:
+      core.spawn: true
+      core.spawn.others: true
   # OTHER
   core.cooldown.bypass.home:
     description: Bypass home teleportation cooldown
+    default: op
+  core.cooldown.bypass.spawn:
+    description: Bypass spawn teleportation cooldown
     default: op
   core.cooldown.bypass.heal:
     description: Bypass healing cooldown
@@ -165,6 +193,7 @@ permissions:
     default: op
     children:
       core.cooldown.bypass.home: true
+      core.cooldown.bypass.spawn: true
       core.cooldown.bypass.heal: true
       core.cooldown.bypass.feed: true
   core.warmup.bypass:
@@ -187,7 +216,11 @@ permissions:
       core.home.max.unlimited: true
       core.nickname: true
       core.nickname.others: true
+      core.spawn: true
+      core.spawn.others: true
+      core.setspawn: true
       core.cooldown.bypass.home: true
+      core.cooldown.bypass.spawn: true
       core.cooldown.bypass.heal: true
       core.cooldown.bypass.feed: true
       core.warmup.bypass: true

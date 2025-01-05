@@ -170,12 +170,14 @@ public class HomeModule implements CommandExecutor {
             return;
         }
 
-        if (!cooldownManager.check(player, CooldownManager.CooldownType.TELEPORT) && !player.hasPermission(PERMISSION_COOLDOWN_BYPASS_HOME))
+        if (!cooldownManager.check(player, CooldownManager.CooldownType.HOME) && !player.hasPermission(PERMISSION_COOLDOWN_BYPASS_HOME))
             return;
 
         warmupManager.start(uuid, () -> {
             player.teleport(loc);
-            cooldownManager.setCooldown(player, CooldownManager.CooldownType.TELEPORT);
+            player.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR,
+                    net.md_5.bungee.api.chat.TextComponent.fromLegacy(format("&dWhoosh &7- Teleported you to &d{0}", homeName)));
+            cooldownManager.setCooldown(player, CooldownManager.CooldownType.HOME);
         });
     }
 

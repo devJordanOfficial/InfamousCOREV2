@@ -18,6 +18,7 @@ public final class Main extends JavaPlugin {
 
     private FileManager generalConfig;
     private FileManager conversions;
+    private FileManager dataFile;
     private Database database;
 
     private PlayerDataManager playerDataManager;
@@ -43,6 +44,7 @@ public final class Main extends JavaPlugin {
     private void loadConfig() {
         generalConfig = new FileManager(this, "config.yml");
         conversions = new FileManager(this, "conversions.yml");
+        dataFile = new FileManager(this, "data.yml");
     }
 
     private void loadManagers() {
@@ -80,4 +82,5 @@ public final class Main extends JavaPlugin {
 
     public FileManager generalConfig() { return generalConfig; }
     public FileManager conversions() { return conversions; }
+    public FileManager dataFile() { return dataFile; }
 }
