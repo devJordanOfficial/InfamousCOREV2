@@ -3,6 +3,8 @@ package com.infamousgc.infamousCORE;
 import com.infamousgc.infamousCORE.Events.EntityDamage;
 import com.infamousgc.infamousCORE.Events.PlayerMove;
 import com.infamousgc.infamousCORE.Modules.SpawnModule;
+import com.infamousgc.infamousCORE.Modules.TpaModule;
+import com.infamousgc.infamousCORE.TabCompleters.TpaTab;
 import com.infamousgc.infamousCORE.Utils.Logger;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
@@ -33,7 +35,7 @@ public class Registrar {
 
             try {
                 CommandExecutor executor = createExecutor(module.getExecutor());
-                TabCompleter tabCompleter = createTabCompleter(module.getTabCompleter());
+                TabCompleter tabCompleter = createTabCompleter(module);
                 boolean moduleLoaded = true;
 
                 for (String name : module.getCommands()) {
@@ -90,8 +92,12 @@ public class Registrar {
         return createInstance(executorClass);
     }
 
-    private TabCompleter createTabCompleter(Class<? extends TabCompleter> tabCompleterClass) throws Exception {
-        return createInstance(tabCompleterClass);
+    private TabCompleter createTabCompleter(ModuleManager module) throws Exception {
+        if (module == ModuleManager.TPA) {
+            TpaModule tpaModule = (TpaModule) createInstance(module.getExecutor());
+            return new TpaTab(tpaModule);
+        }
+        return createInstance(module.getTabCompleter());
     }
 
     @SuppressWarnings("unchecked")
@@ -104,15 +110,5 @@ public class Registrar {
             }
         }
         return clazz.getDeclaredConstructor().newInstance();
-    }
-
-    private Listener createListenerInstance(Class<? extends Listener> listenerClass) throws Exception {
-        Constructor<?>[] constructors = listenerClass.getConstructors();
-        for (Constructor<?> constructor : constructors) {
-            Class<?>[] paramTypes = constructor.getParameterTypes();
-            if (paramTypes.length == 1 && paramTypes[0] == Main.class)
-                return (Listener) constructor.newInstance(plugin);
-        }
-        return listenerClass.getDeclaredConstructor().newInstance();
     }
 }

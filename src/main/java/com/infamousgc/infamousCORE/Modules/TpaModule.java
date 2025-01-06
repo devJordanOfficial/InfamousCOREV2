@@ -11,10 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static com.infamousgc.infamousCORE.Utils.Formatter.*;
 
@@ -26,7 +23,9 @@ public class TpaModule implements CommandExecutor {
     private final Map<UUID, UUID> outgoingRequests = new HashMap<>(); // sender -> target
     private final Map<UUID, BukkitTask> expirationTasks = new HashMap<>(); // sender -> task
 
-    private static final String USAGE = "/tpa <Player>";
+    private static final String TPA_USAGE = "/tpa <Player>";
+    private static final String TPACCEPT_USAGE = "/tpaccept [Player]";
+    private static final String TPDENY_USAGE = "/tpdeny [Player]";
     private static final String PERMISSION_TPA = "core.tpa";
     private static final String PERMISSION_COOLDOWN_BYPASS_TPA = "core.cooldown.bypass.tpa";
     private static final int REQUEST_EXPIRATION_TIME = 60; // in seconds
@@ -60,7 +59,7 @@ public class TpaModule implements CommandExecutor {
         }
 
         if (args.length != 1) {
-            Error.invalidArguments(sender, USAGE);
+            Error.invalidArguments(sender, TPA_USAGE);
             return true;
         }
 
@@ -100,6 +99,12 @@ public class TpaModule implements CommandExecutor {
 
     private boolean handleTpaccept(Player target, String[] args) {
         UUID targetUUID = target.getUniqueId();
+
+        if (args.length > 1) {
+            Error.invalidArguments(target, TPACCEPT_USAGE);
+            return true;
+        }
+
         Map<UUID, Long> requests = incomingRequests.get(targetUUID);
 
         UUID senderUUID = getSenderUUID(target, args, requests);
@@ -129,6 +134,12 @@ public class TpaModule implements CommandExecutor {
 
     private boolean handleTpdeny(Player target, String[] args) {
         UUID targetUUID = target.getUniqueId();
+
+        if (args.length > 1) {
+            Error.invalidArguments(target, TPDENY_USAGE);
+            return true;
+        }
+
         Map<UUID, Long> requests = incomingRequests.get(targetUUID);
 
         UUID senderUUID = getSenderUUID(target, args, requests);
@@ -222,5 +233,10 @@ public class TpaModule implements CommandExecutor {
         }, REQUEST_EXPIRATION_TIME * 20);
 
         expirationTasks.put(senderUUID, expirationTask);
+    }
+
+    public List<UUID> getIncomingRequests(UUID targetUUID) {
+        Map<UUID, Long> requests = incomingRequests.get(targetUUID);
+        return requests != null ? new ArrayList<>(requests.keySet()) : new ArrayList<>();
     }
 }
