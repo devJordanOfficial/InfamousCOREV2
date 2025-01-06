@@ -49,6 +49,7 @@ public class CooldownManager {
         return switch (type) {
             case HOME -> "&7You must wait &e" + remainingTime + " seconds&7 before teleporting to a home again";
             case SPAWN -> "&7You must wait &e" + remainingTime + " seconds&7 teleporting to spawn again";
+            case TPA -> "&7You must wait &e" + remainingTime + " seconds&7 before sending a teleport request again";
             case HEAL -> "&7You must wait &e" + remainingTime + " seconds&7 before healing again";
             case FEED -> "&7You must wait &e" + remainingTime + " seconds&7 before feeding yourself again";
         };
@@ -57,6 +58,7 @@ public class CooldownManager {
     public enum CooldownType {
         HOME,
         SPAWN,
+        TPA,
         HEAL,
         FEED,
     }

@@ -15,7 +15,8 @@ public enum ModuleManager {
     HEAL(HealModule.class, FeedHealTab.class, "heal"),
     HOME(HomeModule.class, HomeTab.class, "sethome", "delhome", "home", "homes"),
     NICKNAME(NicknameModule.class, NicknameTab.class, "nickname"),
-    SPAWN(SpawnModule.class, SpawnTab.class, "spawn", "setspawn");
+    SPAWN(SpawnModule.class, SpawnTab.class, "spawn", "setspawn"),
+    TPA(TpaModule.class, TpaTab.class, "tpa", "tpcancel", "tpaccept", "tpdeny");
 
     private final Class<? extends CommandExecutor> executor;
     private final Class<? extends TabCompleter> tabCompleter;

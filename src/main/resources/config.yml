@@ -31,6 +31,7 @@ home:
 cooldown: # The amount of time (in seconds) a player must wait before...
   home: 5 # ...teleporting to a home
   spawn: 0 # ...teleporting to spawn
+  tpa: 5
   heal: 60 # ...using /heal
   feed: 60 # ...using /feed
 

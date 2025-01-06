@@ -77,6 +77,22 @@ commands:
     description: Set the server spawn to current location
     usage: /setspawn
     permission: core.setspawn
+  # TPA
+  tpa:
+    description: Request to teleport to a player
+    usage: /tpa <Player>
+    permission: core.tpa
+  tpcancel:
+    description: Cancel a teleport request
+    usage: /tpcancel
+    aliases: [ tpacancel ]
+    permission: core.tpa
+  tpaccept:
+    description: Accept a teleport request
+    usage: /tpaccept
+  tpdeny:
+    description: Decline a teleport request
+    usage: /tpdeny
   # OTHER
   confirm:
     description: Confirm an action - does nothing on its own
@@ -175,12 +191,19 @@ permissions:
     children:
       core.spawn: true
       core.spawn.others: true
+  # TPA
+  core.tpa:
+    description: Allows requesting to teleport to a player
+    default: op
   # OTHER
   core.cooldown.bypass.home:
     description: Bypass home teleportation cooldown
     default: op
   core.cooldown.bypass.spawn:
     description: Bypass spawn teleportation cooldown
+    default: op
+  core.cooldown.bypass.tpa:
+    description: Bypass teleportation request cooldown
     default: op
   core.cooldown.bypass.heal:
     description: Bypass healing cooldown
@@ -194,6 +217,7 @@ permissions:
     children:
       core.cooldown.bypass.home: true
       core.cooldown.bypass.spawn: true
+      core.cooldown.bypass.tpa: true
       core.cooldown.bypass.heal: true
       core.cooldown.bypass.feed: true
   core.warmup.bypass:
@@ -219,8 +243,10 @@ permissions:
       core.spawn: true
       core.spawn.others: true
       core.setspawn: true
+      core.tpa: true
       core.cooldown.bypass.home: true
       core.cooldown.bypass.spawn: true
+      core.cooldown.bypass.tpa: true
       core.cooldown.bypass.heal: true
       core.cooldown.bypass.feed: true
       core.warmup.bypass: true
